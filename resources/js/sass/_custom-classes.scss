@@ -1,0 +1,123 @@
+.active-link {
+    color: $menu-item-hover-color !important;
+    // fill: $menu-item-hover-color !important;
+    & .unicon,
+    svg {
+        fill: $menu-item-hover-color !important;
+    }
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+html[data-sidenav-size="condensed"]:not([data-layout="topnav"]) {
+    & .active-link:hover {
+        color: $white !important;
+        & .unicon,
+        svg {
+            fill: $white !important;
+        }
+    }
+}
+
+.table {
+    th {
+        min-width: 120px !important;
+    }
+}
+
+.slide-fade-enter-active {
+    transition: all 0.3s ease-out;
+}
+
+.slide-fade-leave-active {
+    transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.slide-fade-enter-from,
+.slide-fade-leave-to {
+    transform: translateX(20px);
+    opacity: 0;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    overflow-y: scroll;
+    // background: rgba(#eaeaee, 0.3);
+    background-color: transparent;
+    // box-shadow: inset 0 0 4px #707070;
+}
+
+::-webkit-scrollbar-thumb {
+    display: none;
+    background: rgba($black, 0.15);
+    // background: rgba(var($menu-item-active-color), 1);
+    border-radius: 10px;
+}
+
+* :hover::-webkit-scrollbar-thumb {
+    display: block;
+}
+
+.w-auto {
+    width: auto !important;
+}
+
+.unicon {
+    & .muted {
+        fill: $text-muted !important;
+    }
+}
+.bg-midnight {
+    background-color: #12264a;
+    color: white;
+}
+@mixin height-list {
+    @for $i from 1 through 4 {
+        .min-h-#{$i}-p {
+            min-height: $i * 25%;
+        }
+    }
+    @for $i from 0 through 100 {
+        $h: $i * 4 + px;
+        .min-h-#{$i} {
+            min-height: $h;
+        }
+        .max-h-#{$i} {
+            max-height: $h;
+        }
+        .ch-#{$i} {
+            height: $h;
+        }
+        .min-h-screen {
+            min-height: 100vh;
+        }
+    }
+}
+@mixin width-list {
+    @for $i from 1 through 4 {
+        .min-w-#{$i}-p {
+            min-width: $i * 25%;
+        }
+    }
+    @for $i from 0 through 100 {
+        $w: $i * 4 + px;
+        .min-w-#{$i} {
+            min-width: $w;
+        }
+        .max-w-#{$i} {
+            max-width: $w;
+        }
+        .max-w-#{$i}-p {
+            max-width: $i * 1%;
+        }
+        .cw-#{$i} {
+            width: $w;
+        }
+        .min-w-screen {
+            min-width: 100vw;
+        }
+    }
+}
+@include height-list;
+@include width-list;

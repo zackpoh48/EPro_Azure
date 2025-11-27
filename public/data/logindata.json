@@ -1,0 +1,9 @@
+{
+    "success": true,
+    "data": {
+        "name": "User",
+        "email": "user@user.com",
+        "token": "2w38$dj!#wdnx29&jsx1",
+        "role": "admin"
+    }
+}

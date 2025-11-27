@@ -1,0 +1,77 @@
+canvas {
+    border: 1px solid #dee2e6;
+    cursor: crosshair;
+    /* width: 100%; */
+    max-height: 150px;
+}
+
+body {
+    padding: 2em;
+}
+
+.heading-sm {
+    color: #a7a7a7;
+    font-weight: 400;
+}
+
+.instruction-steps {
+    list-style: none;
+    padding: 0;
+}
+
+.instruction-steps li {
+    margin-bottom: 20px;
+}
+
+.instruction-steps li p.step-heading {
+    color: #a7a7a7;
+    margin: 0;
+    margin-bottom: 8px;
+}
+
+.instruction-steps li p.step-heading .status {
+    font-style: italic;
+}
+
+.instruction-steps li p.step-heading .status.complete {
+    color: #ca2b2b;
+}
+
+.instruction-steps li p.step-heading .status.incomplete {
+    color: #2ebe6f;
+}
+
+.instruction-steps li .step-strip {
+    background: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.instruction-steps li.active .step-strip {
+    background: #fad139;
+}
+
+.instruction-steps li .step-strip p {
+    font-weight: bold;
+    color: #000;
+    margin: 0;
+}
+
+.instruction-steps li .step-strip button.btn {
+    background: #fff;
+    border: none;
+    padding: 5px 20px;
+    border-radius: 50px;
+    color: #000;
+    font-weight: bold;
+    min-width: 180px;
+    cursor: pointer;
+}
+
+.save-draft {
+    color: black;
+    background-color: white !important;
+    border: 1px solid black !important;
+}

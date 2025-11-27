@@ -1,0 +1,28 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@prettier/plugin-php": "^0.19.5",
+        "@types/node": "^20.1.2",
+        "axios": "^1.1.2",
+        "laravel-vite-plugin": "^0.7.2",
+        "prettier": "^2.8.8",
+        "sass": "^1.62.1",
+        "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@vitejs/plugin-vue": "^4.2.1",
+        "@vueuse/core": "^10.1.2",
+        "bootstrap": "^5.3.0-alpha3",
+        "moment": "^2.29.4",
+        "vue": "^3.2.36",
+        "vue-loader": "^17.0.1",
+        "vue-multiselect": "^3.0.0-beta.3",
+        "vue-router": "^4.1.6",
+        "vue-toast-notification": "^3.1.1",
+        "vue-unicons": "^3.3.1"
+    }
+}

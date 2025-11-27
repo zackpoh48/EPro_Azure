@@ -1,0 +1,1061 @@
+<template>
+    <div class="page-wrapper mt-4">
+        <loader v-if="loading"></loader>
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb p-2 mb-1">
+                        <li class="breadcrumb-item">
+                            <a href="#">My Application</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Submission Details
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6 col-12">
+                                RFQ : <b>#{{ form.rfq_id }} </b>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-12">
+                                Date of RFQ : <b>{{ form.date_of_rfq }}</b>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-12">
+                                Priority : <b>{{ form.priority }}</b>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-12">
+                                No. of days left before expiry :
+                                <b>{{ finalDateDiff }}</b>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-12">
+                                Requisition no. :
+                                <b>{{ form.quotation_no }}</b>
+                            </div>
+                            <div class="col-md-4 col-sm-6 col-12">
+                                Buyer remarks :
+                                <b>{{ form.buyer_remarks }}</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form class="needs-validation" novalidate="">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-3">
+                                <span class="text-danger">
+                                    <i class="dripicons-time-reverse"></i>
+                                    {{ finalDateDiff }} left</span
+                                >
+                                Expiry on {{ form.date_of_expiry | formatDate }}
+                            </h5>
+                            <div id="custom-styles-preview">
+                                <div class="row">
+                                    <div class="col-xl-4 col-sm-6 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="validationCustom01"
+                                                >Expected Delivery Date
+                                                <span class="text-danger"
+                                                    >*</span
+                                                >
+                                            </label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                id="delivery_date"
+                                                placeholder="Expected Delivery Date"
+                                                data-provide="datepicker"
+                                                data-date-format="d M,yyyy"
+                                                data-date-autoclose="true"
+                                                readonly
+                                                v-bind:class="{
+                                                    'is-invalid':
+                                                        errors.delivery_date,
+                                                }"
+                                            />
+                                            <div class="invalid-feedback">
+                                                {{ errors.delivery_date }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-sm-6 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="validationCustom01"
+                                                >Pay Terms
+                                            </label>
+                                            <select
+                                                class="form-control select2"
+                                                data-toggle="select2"
+                                                v-model="form.pay_terms"
+                                            >
+                                                <option :value="null">
+                                                    Select
+                                                </option>
+                                                <option value="30 days">
+                                                    30 days
+                                                </option>
+                                                <option value="60 days">
+                                                    60 days
+                                                </option>
+                                                <option value="90 days">
+                                                    90 days
+                                                </option>
+                                                <option value="other">
+                                                    Other
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-xl-4 col-sm-6 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="validationCustom01">Advance Paid
+                                            </label>
+                                            <input type="text" class="form-control" placeholder="Advance Paid"
+                                                v-model="form.advance_paid" @keypress="
+                                                    onKeypress(
+                                                        $event,
+                                                        form.advance_paid
+                                                    )
+                                                " />
+                                        </div>
+                                    </div> -->
+                                    <div class="col-xl-4 col-sm-6 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="validationCustom01"
+                                                >Supplier Quotation No.
+                                                <span class="text-danger"
+                                                    >*</span
+                                                >
+                                            </label>
+                                            <textarea
+                                                class="form-control"
+                                                v-model="
+                                                    form.vendor_quotation_no
+                                                "
+                                                v-bind:class="{
+                                                    'is-invalid':
+                                                        errors.vendor_quotation_no,
+                                                }"
+                                                maxlength="35"
+                                            >
+                                            </textarea>
+                                            <div class="invalid-feedback">
+                                                {{ errors.vendor_quotation_no }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-sm-6 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="validationCustom01"
+                                                >Currency
+                                                <span class="text-danger"
+                                                    >*</span
+                                                >
+                                            </label>
+                                            <select
+                                                class="form-control select2"
+                                                data-toggle="select2"
+                                                v-model="form.currency"
+                                                v-bind:class="{
+                                                    'is-invalid':
+                                                        errors.currency,
+                                                }"
+                                            >
+                                                <option :value="null">
+                                                    Select
+                                                </option>
+                                                <option value="MYR">MYR</option>
+                                                <option value="USD">USD</option>
+                                            </select>
+                                            <div class="invalid-feedback">
+                                                {{ errors.currency }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-sm-6 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="validationCustom01"
+                                                >Supplier Remarks
+                                            </label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder="Supplier Remarks"
+                                                v-model="form.supplier_remarks"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-sm-6 col-12">
+                                        <div class="form-group mb-3">
+                                            <label for="validationCustom01"
+                                                >Delivery Location
+                                            </label>
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                placeholder="Delivery Location"
+                                                v-model="form.delivery_location"
+                                                readonly
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table
+                                class="table max-content table-hover table-centered mb-0"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th>S.No</th>
+                                        <th>Description</th>
+                                        <th>Qty</th>
+                                        <th>UOM</th>
+                                        <th>Offer Oty</th>
+                                        <th>Offer UOM</th>
+                                        <th>Cost</th>
+                                        <th>Disc(%)</th>
+                                        <th>SST(%)</th>
+                                        <th>Remarks</th>
+                                        <th>Submitting</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) in form.items">
+                                        <td>{{ index + 1 }}</td>
+                                        <td>
+                                            <p
+                                                class="text-primary font-weight-bold mb-0"
+                                            >
+                                                {{ item.item_description }}
+                                            </p>
+                                            <small class="d-block">
+                                                <b>
+                                                    No.
+                                                    {{ item.item_no }}
+                                                </b>
+                                            </small>
+                                            <span
+                                                class="badge badge-primary-lighten badge-pill"
+                                                >Delivery Date
+                                                {{
+                                                    item.item_expected_delivery
+                                                        | formatDate
+                                                }}</span
+                                            >
+                                        </td>
+                                        <td>
+                                            <p>{{ item.qty }}</p>
+                                        </td>
+                                        <td>
+                                            <p>{{ item.uom }}</p>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input
+                                                    class="form-control number-min-width"
+                                                    v-model="
+                                                        form.items[index]
+                                                            .offer_qty
+                                                    "
+                                                    v-bind:class="{
+                                                        'is-invalid':
+                                                            errorsItem[index]
+                                                                .offer_qty,
+                                                    }"
+                                                    :disabled="
+                                                        form.items[index]
+                                                            .is_submitting ===
+                                                        '0'
+                                                    "
+                                                    @keypress="
+                                                        onKeypress(
+                                                            $event,
+                                                            form.items[index]
+                                                                .offer_qty
+                                                        )
+                                                    "
+                                                />
+                                                <div class="invalid-feedback">
+                                                    {{
+                                                        errorsItem[index]
+                                                            .offer_qty
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input
+                                                    class="form-control number-min-width"
+                                                    v-model="
+                                                        form.items[index]
+                                                            .offer_uom
+                                                    "
+                                                    v-bind:class="{
+                                                        'is-invalid':
+                                                            errorsItem[index]
+                                                                .offer_uom,
+                                                    }"
+                                                    :disabled="
+                                                        form.items[index]
+                                                            .is_submitting ===
+                                                        '0'
+                                                    "
+                                                />
+                                                <div class="invalid-feedback">
+                                                    {{
+                                                        errorsItem[index]
+                                                            .offer_uom
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input
+                                                    type="text"
+                                                    class="form-control number-min-width"
+                                                    v-model="
+                                                        form.items[index].cost
+                                                    "
+                                                    v-bind:class="{
+                                                        'is-invalid':
+                                                            errorsItem[index]
+                                                                .cost,
+                                                    }"
+                                                    :disabled="
+                                                        form.items[index]
+                                                            .is_submitting ===
+                                                        '0'
+                                                    "
+                                                    @keypress="
+                                                        onKeypress(
+                                                            $event,
+                                                            form.items[index]
+                                                                .cost
+                                                        )
+                                                    "
+                                                />
+                                                <div class="invalid-feedback">
+                                                    {{ errorsItem[index].cost }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input
+                                                    type="text"
+                                                    class="form-control number-min-width"
+                                                    v-model="
+                                                        form.items[index]
+                                                            .discount
+                                                    "
+                                                    v-bind:class="{
+                                                        'is-invalid':
+                                                            errorsItem[index]
+                                                                .discount,
+                                                    }"
+                                                    :disabled="
+                                                        form.items[index]
+                                                            .is_submitting ===
+                                                        '0'
+                                                    "
+                                                    @keypress="
+                                                        onKeypress(
+                                                            $event,
+                                                            form.items[index]
+                                                                .discount
+                                                        )
+                                                    "
+                                                />
+                                                <div class="invalid-feedback">
+                                                    {{
+                                                        errorsItem[index]
+                                                            .discount
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input
+                                                    type="text"
+                                                    class="form-control number-min-width"
+                                                    v-model="
+                                                        form.items[index].sst
+                                                    "
+                                                    v-bind:class="{
+                                                        'is-invalid':
+                                                            errorsItem[index]
+                                                                .sst,
+                                                    }"
+                                                    :disabled="
+                                                        form.items[index]
+                                                            .is_submitting ===
+                                                        '0'
+                                                    "
+                                                    @keypress="
+                                                        onKeypress(
+                                                            $event,
+                                                            form.items[index]
+                                                                .sst
+                                                        )
+                                                    "
+                                                />
+                                                <div class="invalid-feedback">
+                                                    {{ errorsItem[index].sst }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <input
+                                                    type="text"
+                                                    class="form-control"
+                                                    v-model="
+                                                        form.items[index]
+                                                            .remarks
+                                                    "
+                                                    v-bind:class="{
+                                                        'is-invalid':
+                                                            errorsItem[index]
+                                                                .remarks,
+                                                    }"
+                                                    :disabled="
+                                                        form.items[index]
+                                                            .is_submitting ===
+                                                        '0'
+                                                    "
+                                                />
+                                                <div class="invalid-feedback">
+                                                    {{
+                                                        errorsItem[index]
+                                                            .remarks
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select
+                                                    class="form-control select2"
+                                                    data-toggle="select2"
+                                                    v-model="
+                                                        form.items[index]
+                                                            .is_submitting
+                                                    "
+                                                >
+                                                    <!-- <option :value="null">Select</option> -->
+                                                    <option value="1">
+                                                        Yes
+                                                    </option>
+                                                    <option value="0">
+                                                        No
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>{{ itemTotal[index] }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <p class="text-secondary mb-0">
+                                    Please attach the Quotation
+                                </p>
+
+                                <p class="w-90 text-muted font-italic mb-1">
+                                    Acceptable file type: jpg, jpeg, png, doc,
+                                    docx, pdf, xls, xlsx.<br />Max. file size:
+                                    10MBs
+                                </p>
+                                <p class="text-muted font-italic mb-1">
+                                    Can add up to 3 files.
+                                </p>
+                                <div class="w-50 add-more-file">
+                                    <div id="quotation">
+                                        <div class="form-group mb-1">
+                                            <input
+                                                type="file"
+                                                class="form-control"
+                                                name="quotation[]"
+                                                multiple="multiple"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="text-danger small show">
+                                        {{ errors.quotation }}
+                                    </div>
+                                    <a
+                                        @click="addMoreFile('quotation')"
+                                        class="d-inline-block mb-3"
+                                        ><i class="uil uil-plus"></i> Add More
+                                        File</a
+                                    >
+                                </div>
+                            </div>
+                            <div
+                                class="col-6 offset-xs-0 offset-sm-0 text-right"
+                            >
+                                <div class="row">
+                                    <div class="col-sm-5 col-6">
+                                        <h5>Additional Discount(%)</h5>
+                                    </div>
+                                    <div class="col-sm-6 col-6">
+                                        <div class="form-group">
+                                            <input
+                                                type="text"
+                                                class="form-control"
+                                                v-model="form.document_discount"
+                                                @keypress="
+                                                    onKeypress(
+                                                        $event,
+                                                        form.document_discount
+                                                    )
+                                                "
+                                            />
+                                            <div
+                                                class="invalid-feedback text-left"
+                                            >
+                                                Looks good!
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8 col-12">
+                                        <h4>
+                                            Total
+                                            <b
+                                                >{{ grandTotal }}
+                                                {{ form.currency }}</b
+                                            >
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4>Term and conditions</h4>
+                        <p class="text-muted mb-1">
+                            Please click the link(s) to view the
+                            <a
+                                :href="`/${tnc_url}`"
+                                class="font-weight-bold"
+                                target="_blank"
+                                >Term and conditions</a
+                            >
+                        </p>
+                        <div class="custom-control custom-checkbox">
+                            <input
+                                type="checkbox"
+                                class="custom-control-input"
+                                id="customCheck1"
+                                v-model="form.terms"
+                                v-bind:class="{
+                                    'is-invalid': errors.terms,
+                                }"
+                            />
+                            <label
+                                class="custom-control-label mlc-1"
+                                for="customCheck1"
+                            >
+                                I agree to the Terms and conditions</label
+                            >
+                            <div class="invalid-feedback text-left">
+                                {{ errors.terms }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-12 text-right">
+                <button
+                    type="button"
+                    class="btn btn-primary btn-rounded"
+                    @click="updateRfqDetails('save')"
+                >
+                    Save as Draft
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-success btn-rounded mlc-1"
+                    @click="updateRfqDetails('submit')"
+                >
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import Loader from "../common/Loader.vue";
+import Events from "../common/Events.js";
+import Errors from "../common/Errors.js";
+
+export default {
+    components: {
+        Loader,
+    },
+    data() {
+        return {
+            loading: false,
+            form: {
+                rfq_id: this.$route.params.rfq_id,
+                delivery_date: null,
+                pay_terms: null,
+                vendor_quotation_no: "",
+                supplier_remarks: "",
+                delivery_location: "",
+                currency: "",
+                items: [],
+                document_discount: "",
+                total: "",
+                terms: "",
+                status: "",
+                quotation_files: "",
+            },
+            tnc_url: "",
+            finalDateDiff: "",
+            errors: {},
+            errorsItem: [],
+        };
+    },
+
+    methods: {
+        checkFileValidation(param, type) {
+            if (type === "multi") {
+                $(`input[name='${param}[]'`).each((i, data) => {
+                    this.fileValidator(data, param);
+                });
+            } else {
+                this.fileValidator(this.$refs[param], param);
+            }
+        },
+
+        fileValidator(data, param) {
+            const input = data.files[0];
+            const inputSize = Math.round(input / 1024);
+
+            if (!input) this.errors[param] = "File is required";
+            if (input && inputSize > 10240)
+                this.errors[param] = "File size must not be larger than 10MB";
+            if (
+                input &&
+                !new RegExp("^.*\.(jpg|jpeg|png|pdf|doc|docx|xls|xlsx)$").test(
+                    input.name
+                )
+            )
+                this.errors[param] = "Invalid file extension specified";
+        },
+
+        addMoreFile(id) {
+            $(`#${id}`).append(`
+            <div class="form-group mb-1" style="display: inline-flex;">
+                    <input
+                        type="file"
+                        class="form-control"
+                        name="${id}[]"
+                        multiple="multiple"
+                    />
+                    <button type="button" class="remove-div">X</button>
+                </div>
+            `);
+            if ($(`#${id}`).find("div").length === 3) {
+                $(`#${id}`)
+                    .parent()
+                    .find("a")
+                    .removeClass("d-inline-block")
+                    .addClass("d-none");
+                return;
+            }
+        },
+
+        removeFileUpload(self) {
+            const target = $(self).parents(".add-more-file").find("a");
+            $(self).parent().remove();
+            target.addClass("d-inline-block").removeClass("d-none");
+        },
+
+        getRfqDetails() {
+            this.loading = true;
+            axios
+                .get("/api/rfq-details", {
+                    headers: {
+                        Authorization: `Bearer ${this.$ls.get(
+                            "authorization"
+                        )}`,
+                    },
+                    params: {
+                        rfq_id: this.$route.params.rfq_id,
+                    },
+                })
+                .then((res) => res.data)
+                .then((res) => {
+                    this.form = {
+                        ...this.form,
+                        ...res.data,
+                    };
+                    this.generateItems();
+                    this.initDatepicker();
+                    this.dateDiffCal(res.data);
+                    $.toast({
+                        heading: res.status,
+                        text: res.message,
+                        icon: "success",
+                    });
+                })
+                .catch((error) => {
+                    error = error.response.data;
+                    $.toast({
+                        heading: error.status,
+                        text: error.message,
+                        icon: "error",
+                    });
+                })
+                .finally(() => (this.loading = false));
+        },
+
+        checkForm(type) {
+            this.errors = {};
+
+            if (type !== "save") {
+                let errorMessages = Errors.rfq;
+                Object.keys(errorMessages).forEach((data) => {
+                    if (!this.form[data])
+                        this.errors[data] = errorMessages[data];
+                });
+                this.checkFileValidation("quotation", "multi");
+            }
+
+            if (
+                Object.keys(this.errors).length === 0 &&
+                this.errors.constructor === Object
+            ) {
+                return true;
+            }
+        },
+
+        checkItems(type) {
+            this.errorsItem = [];
+
+            if (type !== "save") {
+                let errorMessages = Errors.rfqItems;
+                Object.keys(errorMessages).forEach((data) => {
+                    this.form.items.forEach((item, i) => {
+                        this.errorsItem[i][data] = "";
+                        if (!item[data])
+                            this.errorsItem[i][data] = errorMessages[data];
+                    });
+                });
+            }
+
+            if (
+                Object.keys(this.errors).length === 0 &&
+                this.errors.constructor === Object
+            ) {
+                return true;
+            }
+        },
+
+        createFormData() {
+            let formData = new FormData();
+            formData.append("rfq_id", this.form?.rfq_id);
+            formData.append("delivery_date", this.form?.delivery_date);
+            formData.append("pay_terms", this.form?.pay_terms ?? "");
+            formData.append(
+                "vendor_quotation_no",
+                this.form?.vendor_quotation_no ?? ""
+            );
+            formData.append("supplier_remarks", this.form?.supplier_remarks);
+            formData.append(
+                "delivery_location",
+                this.form?.delivery_location ?? ""
+            );
+            formData.append("currency", this.form?.currency ?? "");
+            formData.append(
+                "document_discount",
+                this.form?.document_discount ?? ""
+            );
+            formData.append("total", this.form?.total ?? "");
+            formData.append("terms", this.form?.terms);
+            formData.append("status", this.form?.status);
+            formData.append("date_of_rfq", this.form?.date_of_rfq);
+            formData.append("priority", this.form?.priority);
+            formData.append("quotation_no", this.form?.quotation_no);
+            formData.append("buyer_remarks", this.form?.buyer_remarks);
+            formData.append("tender_title", this.form?.tender_title);
+            formData.append("offer_validity", this.form?.offer_validity);
+            formData.append("quality", this.form?.quality ?? "");
+            formData.append("advance_paid", this.form?.advance_paid ?? "");
+
+            $("input[name='quotation[]']").each((i, data) => {
+                if (data.files[0])
+                    formData.append(`quotation_` + i, data.files[0]);
+            });
+
+            for (let i = 0; i < this.form.items.length; i++) {
+                formData.append(
+                    `items[${i}]${"[item_description]"}`,
+                    this.form.items[i]?.item_description ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[item_no]"}`,
+                    this.form.items[i]?.item_no ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[item_expected_delivery]"}`,
+                    this.form.items[i]?.item_expected_delivery ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[quality]"}`,
+                    this.form.items[i]?.quality ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[offer_qty]"}`,
+                    this.form.items[i]?.offer_qty ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[cost]"}`,
+                    this.form.items[i]?.cost ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[discount]"}`,
+                    this.form.items[i]?.discount ?? 0
+                );
+                formData.append(
+                    `items[${i}]${"[offer_uom]"}`,
+                    this.form.items[i]?.offer_uom ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[remarks]"}`,
+                    this.form.items[i]?.remarks ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[id]"}`,
+                    this.form.items[i]?.id ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[is_submitting]"}`,
+                    this.form.items[i]?.is_submitting ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[s_no]"}`,
+                    this.form.items[i]?.s_no ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[qty]"}`,
+                    this.form.items[i]?.qty ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[uom]"}`,
+                    this.form.items[i]?.uom ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[sst]"}`,
+                    this.form.items[i]?.sst ?? ""
+                );
+                formData.append(
+                    `items[${i}]${"[total]"}`,
+                    this.form.items[i]?.total ?? 0
+                );
+            }
+            return formData;
+        },
+
+        updateRfqDetails(type) {
+            let condition = this.checkForm(type);
+            if (condition) {
+                this.loading = true;
+                this.form.status = type === "save" ? 0 : 1;
+                axios
+                    .post("/api/update-rfq-details", this.createFormData(), {
+                        headers: {
+                            Authorization: `Bearer ${this.$ls.get(
+                                "authorization"
+                            )}`,
+                        },
+                    })
+                    .then((res) => res.data)
+                    .then((res) => {
+                        this.$router.push({
+                            path: "/tender-list",
+                        });
+                        $.toast({
+                            heading: res.status,
+                            text: res.message,
+                            icon: "success",
+                        });
+                    })
+                    .catch((error) => {
+                        error = error.response.data;
+                        $.toast({
+                            heading: error.status,
+                            text: error.message,
+                            icon: "error",
+                        });
+                    })
+                    .finally(() => (this.loading = false));
+            }
+        },
+
+        // For managing and error handling of items table
+        generateItems() {
+            let formObject = {
+                offer_qty: "",
+                offer_uom: "",
+                cost: "",
+                discount: "",
+                sst: "",
+                remarks: "",
+                is_submitting: "1",
+            };
+
+            if (this.form.submission)
+                this.form.items = this.form.items.map(
+                    (data) =>
+                        (data = {
+                            ...data,
+                            ...formObject,
+                        })
+                );
+            // New submission
+            else this.form.items = [...this.form.items]; // Edit draft
+
+            this.form.items.forEach(() => {
+                this.errorsItem.push({
+                    ...formObject,
+                });
+            });
+        },
+
+        onKeypress(e, data) {
+            Events.onKeypress(e, data);
+        },
+
+        dateDiffCal(data) {
+            let date = moment(new Date(data.date_of_expiry));
+            let currentDate = moment();
+            let dateDiff = date.diff(currentDate, "days", true).toFixed(0);
+            if (dateDiff == 1) this.finalDateDiff = dateDiff + " day";
+            else this.finalDateDiff = dateDiff + " days";
+        },
+
+        initDatepicker() {
+            $(document).ready(() => {
+                let dateFields = ["delivery_date", "offer_validity"];
+                dateFields.forEach((data) => {
+                    $(`#${data}`).datepicker({
+                        startDate: new Date(),
+                    });
+                    $(`#${data}`)
+                        .datepicker(
+                            "setDate",
+                            (this.form[data] = this.form[data]
+                                ? new Date(this.form[data])
+                                : new Date())
+                        )
+                        .on("changeDate", () => {
+                            this.form[data] = $(`#${data}`).val();
+                        });
+                });
+            });
+        },
+    },
+
+    computed: {
+        itemTotal() {
+            return this.form.items.map((data) => {
+                let discount =
+                    (data.offer_qty * data.cost * data.discount) / 100;
+                data.total = data.offer_qty * data.cost - discount;
+                return parseFloat(data.total).toFixed(2);
+            });
+        },
+
+        grandTotal() {
+            if (this.itemTotal.length !== 0) {
+                let document_discount = this.form.document_discount;
+                if (typeof document_discount && document_discount === "")
+                    document_discount = 0;
+
+                let total_sst = 0;
+                this.form.items.forEach((data) => {
+                    if (data.sst) {
+                        total_sst += (data.total * data.sst) / 100;
+                        total_sst.toFixed(2);
+                    }
+                });
+
+                let discount =
+                    (this.itemTotal.reduce(
+                        (a, b) => parseFloat(a) + parseFloat(b),
+                        total_sst
+                    ) *
+                        document_discount) /
+                    100;
+
+                let grandTotalVal = this.itemTotal.reduce((a, b) => {
+                    return parseFloat(a) + parseFloat(b);
+                }, 0);
+
+                grandTotalVal = grandTotalVal + total_sst;
+
+                grandTotalVal = grandTotalVal - discount;
+
+                return parseFloat(grandTotalVal).toFixed(2);
+            }
+        },
+    },
+
+    created() {
+        const me = this;
+        document.addEventListener("click", function (e) {
+            if (e.target && e.target.matches(".remove-div, .remove-div *")) {
+                me.removeFileUpload(e.target);
+            }
+        });
+    },
+
+    mounted() {
+        // this.getRfqDetails();
+        // this.initDatepicker();
+        // this.tnc_url = this.$ls.get("tnc_url");
+    },
+};
+</script>
+
+<style scoped>
+.mlc-1 {
+    margin-left: 0.375rem;
+}
+</style>
