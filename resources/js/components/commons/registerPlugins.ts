@@ -47,7 +47,7 @@ export function registerPlugins(app: App) {
         return name.toString();
     };
 
-    app.config.globalProperties.$loading = ref(true);
+    app.config.globalProperties.$loading = ref(false);
     app.config.globalProperties.$companyName = ref(
         localStorage.getItem("company_name")
     );

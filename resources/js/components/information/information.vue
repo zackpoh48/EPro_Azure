@@ -8,7 +8,7 @@
                         <div class="card-header text-center bg-midnight p-1">
                             <span
                                 ><img
-                                    src="/../../assets/images/logo_with_text.png"
+                                    src="/../../assets/images/download.png"
                                     alt="logo"
                                     height="110"
                             /></span>

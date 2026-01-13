@@ -9,7 +9,7 @@
                             <router-link to="/">
                                 <span
                                     ><img
-                                        src="assets/images/logo_with_text.png"
+                                        src="assets/images/download.png"
                                         alt="logo"
                                         height="100"
                                 /></span>
