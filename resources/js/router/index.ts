@@ -191,6 +191,16 @@ const routes = [
             },
             {
                 path: "tender-details/:rfq_id",
+                component: () => import("../components/e-tender/ETenderDetails.vue"),
+                name: "User E-Tender Details",
+            },
+              {
+                path: "/tenders",
+                name: "E-Tenders",
+                component: () => import("./../components/e-tender/ListETenders.vue"),
+            },
+            {
+                path: "tender-details/:rfq_id",
                 component: () => import("../components/rfq/TenderDetails.vue"),
                 name: "User Tender Details",
             },

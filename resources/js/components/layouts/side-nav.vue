@@ -110,6 +110,13 @@ export default {
                     icon: "receipt",
                     value: "RFQs",
                 },
+                 {
+                    name: "E-Tenders",
+                    route: "/tenders",
+                    selected: false,
+                    icon: "receipt",
+                    value: "ETenders",
+                },
                 // {
                 //     name: "Purchase Order History",
                 //     route: "/purchase-order-history",
